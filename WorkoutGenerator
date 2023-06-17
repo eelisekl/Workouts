@@ -1,0 +1,45 @@
+def generate_workout():
+    date = input("Enter the date (e.g., DD/MM/YYYY): ")
+    workout = input("Enter the workout (av1, av2, yv1, yv2): ")
+
+    movements = {
+        "av1": ["squat", "RDL", "Bulgarians", "Extensions", "Calf raises"],
+        "av2": ["Squat", "RDL", "Trap bar squat", "Curl", "Calf raises"],
+        "yv1": ["bench", "vertical pull", "overhead press", "row", "side raises"],
+        "yv2": ["incline bench", "horizontal pull", "triceps", "biceps", "side raises"]
+    }
+
+    if workout not in movements:
+        print("Invalid workout selection!")
+        return
+
+    workout_movements = movements[workout]
+    workout_data = []
+
+    for movement in workout_movements:
+        sets_data = []
+        sets = int(input(f"How many sets did you do for {movement}? "))
+
+        for i in range(sets):
+            weight = input(f"Enter the weight for set {i+1} of {movement}: ")
+            reps = input(f"Enter the reps for set {i+1} of {movement}: ")
+            sets_data.append((weight, reps))
+
+        workout_data.append((movement, sets_data))
+
+    write_workout_to_file(date, workout, workout_data)
+
+def write_workout_to_file(date, workout, workout_data):
+    filename = "Workouts.txt"
+    with open(filename, "a") as file:
+        file.write(f"Date: **{date}**\n")
+        file.write(f"Workout: {workout}\n\n")
+        for movement, sets_data in workout_data:
+            file.write(f"Movement: {movement}\n")
+            for i, (weight, reps) in enumerate(sets_data):
+                file.write(f"Set {i+1}: Weight: {weight}, Reps: {reps}\n")
+            file.write("\n")
+
+    print(f"Workout saved to {filename}!")
+
+generate_workout()
